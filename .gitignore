@@ -1,0 +1,5 @@
+# ignore 
+__pycache__/
+*.pyc
+# ignore the changes to *.sh
+*.sh
