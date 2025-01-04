@@ -5,3 +5,6 @@ __pycache__/
 *.sh
 # ignore 
 output/
+# ignore 
+.ipynb_checkpoints/
+*.ipynb
