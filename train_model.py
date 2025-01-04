@@ -10,6 +10,7 @@ from pathlib import Path
 from tensorboardX import SummaryWriter
 import time
 import matplotlib.pyplot as plt
+import numpy as np
 
 # from TinyImageNet import TinyImageNet
 from utils.parse_arg import parse_args, cfg
@@ -17,6 +18,34 @@ from utils.utils import set_seed, DupStdoutFileManager, print_easydict, transfor
     transform_train_norm, transform_test_norm# , TinyImageNet_train_transform, TinyImageNet_test_transform
 
 parse_args('Training model.')
+
+
+def introduce_label_noise_batch(labels: torch.Tensor, 
+                                noise_level: float, 
+                                num_classes: int=10) -> torch.Tensor:
+    """Introduce label noise to a batch of labels using vectorized operations.
+
+    Args:
+        labels: The original labels.
+        noise_level: The fraction of labels to be changed.
+        num_classes: The number of classes in the dataset.
+
+    Returns:
+        The labels with noise introduced.
+    """
+    num_noisy_samples = int(noise_level * len(labels))
+    if num_noisy_samples == 0:
+        return labels
+
+    # Select random indices for introducing noise
+    indices = np.random.choice(len(labels), num_noisy_samples, replace=False)
+    
+    # Generate noisy labels
+    origin_labels = labels[indices]
+    noisy_labels = (origin_labels + torch.randint_like(origin_labels, low=1, high=num_classes)) % num_classes
+    labels[indices] = noisy_labels
+
+    return labels
 
 
 def train_epoch(model, dataloader, optimizer, epoch, tfboard_writer):
@@ -29,9 +58,13 @@ def train_epoch(model, dataloader, optimizer, epoch, tfboard_writer):
     for i,(X, y) in enumerate(dataloader):
         X = X.cuda()
         y = y.cuda()
+        
+        # introduce label noise
+        y_noisy = introduce_label_noise_batch(y.clone(), cfg.train.noise_level, num_classes=10)
+        
         optimizer.zero_grad()
         logit = model(X)
-        loss = F.cross_entropy(logit, y)
+        loss = F.cross_entropy(logit, y_noisy)
         loss.backward()
         optimizer.step()
         acc = (logit.max(1)[1] == y).sum().item() / y.size(0)

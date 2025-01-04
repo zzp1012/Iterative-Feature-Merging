@@ -30,6 +30,7 @@ __C.train.lr = 0.1
 __C.train.momentum = 0.9
 __C.train.weight_decay = 1e-4
 __C.train.log_period = 100
+__C.train.noise_level = 0.0
 
 __C.dataloader = edict()
 __C.dataloader.num_workers = 4
