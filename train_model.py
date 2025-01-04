@@ -11,10 +11,10 @@ from tensorboardX import SummaryWriter
 import time
 import matplotlib.pyplot as plt
 
-from TinyImageNet import TinyImageNet
+# from TinyImageNet import TinyImageNet
 from utils.parse_arg import parse_args, cfg
 from utils.utils import set_seed, DupStdoutFileManager, print_easydict, transform_train, transform_test, \
-    transform_train_norm, transform_test_norm, TinyImageNet_train_transform, TinyImageNet_test_transform
+    transform_train_norm, transform_test_norm# , TinyImageNet_train_transform, TinyImageNet_test_transform
 
 parse_args('Training model.')
 
@@ -148,11 +148,11 @@ if __name__ == '__main__':
         nclass = 100
         trainset = datasets.CIFAR100(root=cfg.data_path, train=True, download=True, transform=transform_train)
         testset = datasets.CIFAR100(root=cfg.data_path, train=False, download=True, transform=transform_test)
-    elif cfg.dataset == "TinyImageNet":
-        nclass = 200
-        #"/home/chenyiting/data/tiny-imagenet-200/words.txt"
-        trainset = TinyImageNet(root=cfg.data_path, split='train', transform=TinyImageNet_train_transform)
-        testset = TinyImageNet(root=cfg.data_path, split='val', transform=TinyImageNet_train_transform)
+    # elif cfg.dataset == "TinyImageNet":
+    #     nclass = 200
+    #     #"/home/chenyiting/data/tiny-imagenet-200/words.txt"
+    #     trainset = TinyImageNet(root=cfg.data_path, split='train', transform=TinyImageNet_train_transform)
+    #     testset = TinyImageNet(root=cfg.data_path, split='val', transform=TinyImageNet_train_transform)
     else:
         raise KeyError(f"Unknown model {cfg.dataset}")
     train_loader = DataLoader(trainset, batch_size=cfg.train.batchsize, shuffle=True, pin_memory=cfg.dataloader.pin_memory, num_workers=cfg.dataloader.num_workers)
