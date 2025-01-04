@@ -61,7 +61,7 @@ def main():
 
     transform = transforms.ToTensor()
 
-    testset = datasets.CIFAR10(root='~/data', train=False,
+    testset = datasets.CIFAR10(root='/cpfs01/user/chenzijun/zhouzhanpeng/data', train=False,
                                download=True, transform=transform)
     test_loader = torch.utils.data.DataLoader(testset, batch_size=64,
                                               shuffle=False, num_workers=2)
