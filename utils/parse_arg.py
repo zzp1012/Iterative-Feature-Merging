@@ -135,8 +135,8 @@ def parse_args(description):
             f = f.split('/')[-1]
             exp_name = exp_name + f"{f}"
 
-    now_day = datetime.datetime.now().strftime('%Y-%m-%d')
-    outp_path = os.path.join('output', now_day, exp_name)
+    # now_day = datetime.datetime.now().strftime('%Y-%m-%d')
+    outp_path = os.path.join('output', exp_name)
     cfg_from_list(['output_path', outp_path])
     if args.seed is not None:
         cfg.train.seed = args.seed
