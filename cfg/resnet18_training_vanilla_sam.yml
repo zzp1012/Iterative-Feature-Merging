@@ -1,0 +1,14 @@
+model: ResNet18
+dataset: cifar10
+
+train:
+  batchsize: 128
+  lr: 0.1
+  momentum: 0.0
+  weight_decay: 0.0000
+  rho: 0.05
+
+
+scheduler:
+  epochs: 160
+  milestones: [160]
